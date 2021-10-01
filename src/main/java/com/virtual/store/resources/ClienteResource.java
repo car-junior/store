@@ -1,7 +1,9 @@
 package com.virtual.store.resources;
 
 import com.virtual.store.domain.Categoria;
+import com.virtual.store.domain.Cliente;
 import com.virtual.store.services.CategoriaService;
+import com.virtual.store.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,16 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/categorias")
-public class CategoriaResource {
+@RequestMapping(value = "/clientes")
+public class ClienteResource {
 
     @Autowired
-    private CategoriaService categoriaService;
+    private ClienteService clienteService;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> find(@PathVariable(value = "id") Integer id){
-        Categoria categoria = categoriaService.buscarPorId(id);
-        return ResponseEntity.ok().body(categoria);
+        Cliente cliente = clienteService.buscarPorId(id);
+        return ResponseEntity.ok().body(cliente);
     }
 
 }

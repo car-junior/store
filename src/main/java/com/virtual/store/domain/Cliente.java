@@ -1,5 +1,6 @@
 package com.virtual.store.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.virtual.store.domain.enums.TipoCliente;
 
 import javax.persistence.*;
@@ -19,6 +20,7 @@ public class Cliente implements Serializable {
     private Integer tipoCliente;
 
     @OneToMany(mappedBy = "cliente")
+    @JsonManagedReference
     private List<Endereco> enderecos = new ArrayList<>();
 
     /** criando elemento no banco sem ser preciso criar uma classe **/
