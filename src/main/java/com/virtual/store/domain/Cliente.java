@@ -28,6 +28,9 @@ public class Cliente implements Serializable {
     @CollectionTable(name = "telefone")
     private Set<String> telefones = new HashSet<>();
 
+    @OneToMany(mappedBy = "cliente")
+    private List<Pedido> pedidos = new ArrayList<>();
+
     public Cliente(){
 
     }
@@ -77,8 +80,8 @@ public class Cliente implements Serializable {
         return TipoCliente.toEnum(tipoCliente);
     }
 
-    public void setTipoCliente(TipoCliente tipoCliente) {
-        this.tipoCliente = tipoCliente.getCodigo();
+    public void setTipoCliente(Integer tipoCliente) {
+        this.tipoCliente = tipoCliente;
     }
 
     public List<Endereco> getEnderecos() {
@@ -87,6 +90,10 @@ public class Cliente implements Serializable {
 
     public Set<String> getTelefones() {
         return telefones;
+    }
+
+    public List<Pedido> getPedidos() {
+        return pedidos;
     }
 
     @Override
