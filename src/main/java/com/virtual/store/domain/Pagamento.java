@@ -7,8 +7,9 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
+/** com o @Inheritance crio um tabela pra cada entidade filha de Pagamento **/
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Pagamento implements Serializable {
+public abstract class Pagamento implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -18,14 +19,13 @@ public class Pagamento implements Serializable {
     @JoinColumn(name = "pedido_id")
     @MapsId
     private Pedido pedido;
-
-    private EstadoPagamento estadoPagamento;
+    private Integer estadoPagamento;
     public Pagamento(){}
 
     public Pagamento(Integer id, Pedido pedido, EstadoPagamento estadoPagamento) {
         this.id = id;
         this.pedido = pedido;
-        this.estadoPagamento = estadoPagamento;
+        this.estadoPagamento = estadoPagamento.getCodigo();
     }
 
     public Integer getId() {
@@ -44,12 +44,13 @@ public class Pagamento implements Serializable {
         this.pedido = pedido;
     }
 
+    /** retorna enum com estado do pagamento **/
     public EstadoPagamento getEstadoPagamento() {
-        return estadoPagamento;
+        return EstadoPagamento.toEnum(estadoPagamento);
     }
 
     public void setEstadoPagamento(EstadoPagamento estadoPagamento) {
-        this.estadoPagamento = estadoPagamento;
+        this.estadoPagamento = estadoPagamento.getCodigo();
     }
 
     @Override
