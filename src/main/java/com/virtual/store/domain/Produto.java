@@ -4,9 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.Set;
 
 @Entity
 public class Produto implements Serializable {
@@ -25,6 +24,11 @@ public class Produto implements Serializable {
     )
     @JsonBackReference
     private List<Categoria> categorias = new ArrayList<>();
+
+    /** fazendo com que produto conheça seus itens **/
+    /** mapeado por id.produto passa por itemPedido -> itemPedidoPK **/
+    @OneToMany(mappedBy = "id.produto")
+    private Set<ItemPedido> itens = new HashSet<>();
 
     public Produto() {
     }
@@ -61,6 +65,19 @@ public class Produto implements Serializable {
 
     public List<Categoria> getCategorias() {
         return categorias;
+    }
+
+    public Set<ItemPedido> getItens() {
+        return itens;
+    }
+
+    /** retornando lista de pedidos vinculados ao produtos **/
+    public List<Pedido> getPedidos(){
+        List<Pedido> lista = new ArrayList<>();
+        for (ItemPedido elemento : itens){
+            lista.add(elemento.getPedido());
+        }
+        return lista;
     }
 
     @Override

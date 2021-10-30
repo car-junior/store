@@ -3,7 +3,9 @@ package com.virtual.store.domain;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Pedido implements Serializable {
@@ -24,6 +26,11 @@ public class Pedido implements Serializable {
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
+
+    /** fazendo com que pedido conheça seus itens **/
+    /** mapeado por id.pedido passa por itemPedido -> itemPedidoPK **/
+    @OneToMany(mappedBy = "id.pedido")
+    private Set<ItemPedido> itens = new HashSet<>();
 
     public Pedido(){}
 
@@ -72,6 +79,10 @@ public class Pedido implements Serializable {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    public Set<ItemPedido> getItens() {
+        return itens;
     }
 
     @Override
