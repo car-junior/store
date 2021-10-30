@@ -1,6 +1,6 @@
 package com.virtual.store.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -22,11 +22,12 @@ public class Produto implements Serializable {
             joinColumns = @JoinColumn(name = "produto_id"),
             inverseJoinColumns = @JoinColumn(name = "categoria_id")
     )
-    @JsonBackReference
+    @JsonIgnore
     private List<Categoria> categorias = new ArrayList<>();
 
     /** fazendo com que produto conheça seus itens **/
     /** mapeado por id.produto passa por itemPedido -> itemPedidoPK **/
+    @JsonIgnore
     @OneToMany(mappedBy = "id.produto")
     private Set<ItemPedido> itens = new HashSet<>();
 
@@ -72,6 +73,7 @@ public class Produto implements Serializable {
     }
 
     /** retornando lista de pedidos vinculados ao produtos **/
+    @JsonIgnore
     public List<Pedido> getPedidos(){
         List<Pedido> lista = new ArrayList<>();
         for (ItemPedido elemento : itens){

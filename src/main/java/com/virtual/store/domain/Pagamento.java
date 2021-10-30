@@ -1,5 +1,6 @@
 package com.virtual.store.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.virtual.store.domain.enums.EstadoPagamento;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ public abstract class Pagamento implements Serializable {
     @OneToOne
     @JoinColumn(name = "pedido_id")
     @MapsId
+    @JsonIgnore
     private Pedido pedido;
     private Integer estadoPagamento;
     public Pagamento(){}
