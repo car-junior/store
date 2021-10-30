@@ -22,4 +22,5 @@ public class PedidoResource {
         return ResponseEntity.ok().body(pedido);
     }
 
+
 }
