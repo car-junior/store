@@ -1,4 +1,4 @@
-package com.virtual.store.services.excpetions;
+package com.virtual.store.services.exceptions;
 
 public class ObjectNotFoundException extends RuntimeException{
     private static final long serialVersionUID = 1L;
