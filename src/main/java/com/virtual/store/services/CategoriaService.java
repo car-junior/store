@@ -6,6 +6,9 @@ import com.virtual.store.services.exceptions.DataIntegrityException;
 import com.virtual.store.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,5 +47,13 @@ public class CategoriaService {
         } catch (DataIntegrityViolationException e){
             throw new DataIntegrityException("Não é possível excluir categoria com produtos vinculados!");
         }
+    }
+
+    public Page<Categoria> findPage(Integer pagina, Integer linhasPorPagina, String ordenarPor, String direcao){
+        /** pageRequest é um objeto que prepara a consulta para retornar a pagina de dados **/
+        PageRequest pageRequest = PageRequest.of(pagina,linhasPorPagina, Sort.Direction.valueOf(direcao), ordenarPor);
+
+        /** retornando objeto de acordo com o findPage **/
+        return categoriaRepository.findAll(pageRequest);
     }
 }

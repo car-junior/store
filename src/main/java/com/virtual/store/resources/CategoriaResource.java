@@ -4,6 +4,7 @@ import com.virtual.store.domain.Categoria;
 import com.virtual.store.domain.dto.CategoriaDTO;
 import com.virtual.store.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -59,5 +60,22 @@ public class CategoriaResource {
                 new CategoriaDTO(elemento)).collect(Collectors.toList());
 
         return ResponseEntity.ok().body(categoriaDTOList);
+    }
+
+    /** definindo variaveis como parametros e opcionais **/
+    /** direcao = ASC OU DESC **/
+    @GetMapping(value = "/page")
+    public ResponseEntity<Page<CategoriaDTO>> findPage(
+            @RequestParam(value = "pagina", defaultValue = "0") Integer pagina,
+            @RequestParam(value = "linhasPorPagina", defaultValue = "24") Integer linhasPorPagina,
+            @RequestParam(value = "ordenarPor", defaultValue = "nome") String ordenarPor,
+            @RequestParam(value = "direcao", defaultValue = "ASC") String direcao){
+
+        Page<Categoria> categoriasPage = categoriaService.findPage(pagina, linhasPorPagina, ordenarPor, direcao);
+
+        /** Page faz parte do java8+ então só se usa o .map() para fazer conversao para o tipo DTO**/
+        Page<CategoriaDTO> categoriasDTOPage = categoriasPage.map(elemento -> new CategoriaDTO(elemento));
+
+        return ResponseEntity.ok().body(categoriasDTOPage);
     }
 }
