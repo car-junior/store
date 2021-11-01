@@ -4,6 +4,8 @@ import com.virtual.store.services.exceptions.DataIntegrityException;
 import com.virtual.store.services.exceptions.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -24,4 +26,18 @@ public class ResourceExceptionHandler {
         StandardError error = new StandardError(HttpStatus.BAD_REQUEST.value(), excecao.getMessage(), System.currentTimeMillis());
         return ResponseEntity.status(error.getStatus()).body(error);
     }
+
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<StandardError> validation(MethodArgumentNotValidException excecao, HttpServletRequest request){
+        ValidationError error = new ValidationError(HttpStatus.BAD_REQUEST.value(), "Erros de Validação", System.currentTimeMillis());
+
+        /** pegando nomes e erros dos respectivos campos **/
+        for ( FieldError elemento : excecao.getBindingResult().getFieldErrors()){
+            error.adicionarError(elemento.getField(), elemento.getDefaultMessage());
+        }
+
+        return ResponseEntity.status(error.getStatus()).body(error);
+    }
+
 }
