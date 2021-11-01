@@ -1,6 +1,7 @@
 package com.virtual.store.services;
 
 import com.virtual.store.domain.Categoria;
+import com.virtual.store.domain.dto.CategoriaDTO;
 import com.virtual.store.repositories.CategoriaRepository;
 import com.virtual.store.services.exceptions.DataIntegrityException;
 import com.virtual.store.services.exceptions.ObjectNotFoundException;
@@ -55,5 +56,9 @@ public class CategoriaService {
 
         /** retornando objeto de acordo com o findPage **/
         return categoriaRepository.findAll(pageRequest);
+    }
+
+    public Categoria converterDTO(CategoriaDTO categoriaDTO){
+        return new Categoria(categoriaDTO.getId(), categoriaDTO.getNome());
     }
 }
