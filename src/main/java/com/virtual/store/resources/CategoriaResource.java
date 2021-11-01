@@ -1,6 +1,7 @@
 package com.virtual.store.resources;
 
 import com.virtual.store.domain.Categoria;
+import com.virtual.store.domain.dto.CategoriaDTO;
 import com.virtual.store.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/categorias")
@@ -47,4 +50,14 @@ public class CategoriaResource {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping
+    public ResponseEntity<List<CategoriaDTO>> findAll(){
+        List<Categoria> categoriaList = categoriaService.findAll();
+
+        /** convertendo minha lista de categorias para categoriasDTO usando o stream **/
+        List<CategoriaDTO> categoriaDTOList = categoriaList.stream().map(elemento ->
+                new CategoriaDTO(elemento)).collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(categoriaDTOList);
+    }
 }
