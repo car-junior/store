@@ -1,6 +1,7 @@
 package com.virtual.store.services;
 
 import com.virtual.store.domain.Categoria;
+import com.virtual.store.domain.Cliente;
 import com.virtual.store.domain.dto.CategoriaDTO;
 import com.virtual.store.repositories.CategoriaRepository;
 import com.virtual.store.services.exceptions.DataIntegrityException;
@@ -37,7 +38,8 @@ public class CategoriaService {
     }
 
     public Categoria update(Categoria categoria){
-        findId(categoria.getId());
+        Categoria categoriaObj = findId(categoria.getId());
+        updateDados(categoriaObj, categoria);
         return categoriaRepository.save(categoria);
     }
 
@@ -60,5 +62,9 @@ public class CategoriaService {
 
     public Categoria converterDTO(CategoriaDTO categoriaDTO){
         return new Categoria(categoriaDTO.getId(), categoriaDTO.getNome());
+    }
+
+    private void updateDados(Categoria categoria, Categoria categoriaDTO){
+        categoria.setNome(categoriaDTO.getNome());
     }
 }

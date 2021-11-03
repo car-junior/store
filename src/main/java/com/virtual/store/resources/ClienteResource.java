@@ -1,6 +1,7 @@
 package com.virtual.store.resources;
 
 import com.virtual.store.domain.Cliente;
+import com.virtual.store.domain.dto.ClienteCreateDTO;
 import com.virtual.store.domain.dto.ClienteUpdateDTO;
 import com.virtual.store.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,8 @@ public class ClienteResource {
     }
 
     @PostMapping
-    public ResponseEntity<Void> insert(@Valid @RequestBody ClienteUpdateDTO clienteUpdateDTO){
-        Cliente cliente = clienteService.converterDTO(clienteUpdateDTO);
+    public ResponseEntity<Void> insert(@Valid @RequestBody ClienteCreateDTO clienteCreateDTO){
+        Cliente cliente = clienteService.converterDTO(clienteCreateDTO);
         cliente = clienteService.insert(cliente);
 
         /** atribuindo uri de criacao do objeto cliente para retornar **/

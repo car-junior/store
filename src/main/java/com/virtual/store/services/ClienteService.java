@@ -1,10 +1,15 @@
 package com.virtual.store.services;
 
 import com.virtual.store.domain.Categoria;
+import com.virtual.store.domain.Cidade;
 import com.virtual.store.domain.Cliente;
+import com.virtual.store.domain.Endereco;
 import com.virtual.store.domain.dto.CategoriaDTO;
+import com.virtual.store.domain.dto.ClienteCreateDTO;
 import com.virtual.store.domain.dto.ClienteUpdateDTO;
+import com.virtual.store.domain.enums.TipoCliente;
 import com.virtual.store.repositories.ClienteRepository;
+import com.virtual.store.repositories.EnderecoRepository;
 import com.virtual.store.services.exceptions.DataIntegrityException;
 import com.virtual.store.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +27,9 @@ import java.util.Optional;
 public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private EnderecoRepository enderecoRepository;
 
     public Cliente findId(Integer id){
         Optional<Cliente> obj = clienteRepository.findById(id);
@@ -32,9 +41,12 @@ public class ClienteService {
         return clienteRepository.findAll();
     }
 
+    @Transactional
     public Cliente insert(Cliente cliente){
         cliente.setId(null);
-        return clienteRepository.save(cliente);
+        cliente = clienteRepository.save(cliente);
+        enderecoRepository.saveAll(cliente.getEnderecos());
+        return cliente;
     }
 
     public Cliente update(Cliente cliente){
@@ -62,6 +74,35 @@ public class ClienteService {
 
     public Cliente converterDTO(ClienteUpdateDTO clienteUpdateDTO){
         return new Cliente(clienteUpdateDTO.getId(), clienteUpdateDTO.getNome(), clienteUpdateDTO.getEmail(), null, null);
+    }
+
+    public Cliente converterDTO(ClienteCreateDTO clienteCreateDTO){
+        /** criado cliente a partir do clienteCreateDTO **/
+        Cliente cliente = new Cliente(null, clienteCreateDTO.getNome(),
+                clienteCreateDTO.getEmail(), clienteCreateDTO.getCpfOuCnpj(),
+                TipoCliente.toEnum(clienteCreateDTO.getTipoCliente()));
+
+        /** passando o id da cidade e com isso quando salver tem o id respectivo da cidade para cadastrar **/
+        Cidade cidade = new Cidade(clienteCreateDTO.getCidadeId(), null, null);
+
+        /** vinculando endereco ao cliente **/
+        Endereco endereco = new Endereco(null, clienteCreateDTO.getLogradouro(),
+                clienteCreateDTO.getNumero(),
+                clienteCreateDTO.getComplemento(), clienteCreateDTO.getBairro(),
+                clienteCreateDTO.getCep(), cliente, cidade);
+
+        cliente.getEnderecos().add(endereco);
+
+        /** vinculando telefones ao cliente **/
+        cliente.getTelefones().add(clienteCreateDTO.getTelefone1());
+        if (clienteCreateDTO.getTelefone2() != null){
+            cliente.getTelefones().add(clienteCreateDTO.getTelefone2());
+        }
+        if (clienteCreateDTO.getTelefone3() != null){
+            cliente.getTelefones().add(clienteCreateDTO.getTelefone3());
+        }
+
+        return cliente;
     }
 
     private void updateDados(Cliente cliente, Cliente clienteUpdateDTO){
