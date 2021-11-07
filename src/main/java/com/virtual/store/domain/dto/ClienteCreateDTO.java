@@ -2,10 +2,7 @@ package com.virtual.store.domain.dto;
 
 import com.virtual.store.services.validations.ClienteCreate;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @ClienteCreate
 public class ClienteCreateDTO {
