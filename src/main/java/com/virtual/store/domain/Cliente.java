@@ -89,6 +89,7 @@ public class Cliente implements Serializable {
         this.tipoCliente = tipoCliente;
     }
 
+    @JsonIgnore
     public List<Endereco> getEnderecos() {
         return enderecos;
     }

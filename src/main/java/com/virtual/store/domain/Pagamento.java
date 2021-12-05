@@ -1,6 +1,7 @@
 package com.virtual.store.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.virtual.store.domain.enums.EstadoPagamento;
 
 import javax.persistence.*;
@@ -10,6 +11,8 @@ import java.util.Objects;
 @Entity
 /** com o @Inheritance crio um tabela pra cada entidade filha de Pagamento **/
 @Inheritance(strategy = InheritanceType.JOINED)
+/** INFORMANDO QUE A CLASSE PAGAMENTO TERÁ UM CAMPO ADICIONAL QUE SE CHAMA @type **/
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 public abstract class Pagamento implements Serializable {
     private static final long serialVersionUID = 1L;
 
