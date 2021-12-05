@@ -6,7 +6,6 @@ import com.virtual.store.domain.dto.ClienteUpdateDTO;
 import com.virtual.store.domain.enums.TipoCliente;
 import com.virtual.store.repositories.ClienteRepository;
 import com.virtual.store.resources.exceptions.FieldMessage;
-import com.virtual.store.services.validations.utils.CNPJCPF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerMapping;
 
