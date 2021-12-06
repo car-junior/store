@@ -4,13 +4,11 @@ import com.virtual.store.services.DBService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import java.text.ParseException;
 
-@Configuration
-@Profile("prod")
+
 public class TestConfig {
     @Autowired
     private DBService dbService;
@@ -22,11 +20,8 @@ public class TestConfig {
     @Bean
     public boolean instanciandoBandoDeDados() throws ParseException {
         /** SE FOR DIFERENTE DE CREATE ELE ENTRA E NAO RECRIA O BANCO **/
-        if (!"create".equals(ddlGeracaoBanco)){
-            return false;
-        }
 
-        dbService.instanciandoTesteBancoDeDados();
+
         return true;
     }
 
