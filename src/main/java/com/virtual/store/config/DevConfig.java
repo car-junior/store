@@ -1,6 +1,9 @@
 package com.virtual.store.config;
 
 import com.virtual.store.services.DBService;
+import com.virtual.store.services.MockEmailService;
+import com.virtual.store.services.ServicoEmail;
+import com.virtual.store.services.SmtpEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -28,4 +31,11 @@ public class DevConfig {
         dbService.instanciandoTesteBancoDeDados();
         return true;
     }
+
+    /** o método @Bean torna o método disponivel como um componente no projeto **/
+    @Bean
+    public ServicoEmail servicoEmail(){
+        return new SmtpEmailService();
+    }
+
 }
