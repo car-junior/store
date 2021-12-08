@@ -1,9 +1,9 @@
 package com.virtual.store.domain.enums;
 
 public enum EstadoPagamento {
-    PENDENTE(1,  "Pagamento Pendente"),
-    QUITADO(2, "Pagamento Quitado"),
-    CANCELADO(3, "Pagamento Cancelado");
+    PENDENTE(1,  "Pendente"),
+    QUITADO(2, "Quitado"),
+    CANCELADO(3, "Cancelado");
 
     private int codigo;
     private String descricao;

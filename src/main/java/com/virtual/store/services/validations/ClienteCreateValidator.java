@@ -1,6 +1,5 @@
 package com.virtual.store.services.validations;
 
-import com.virtual.store.domain.Cliente;
 import com.virtual.store.domain.dto.ClienteCreateDTO;
 import com.virtual.store.domain.enums.TipoCliente;
 import com.virtual.store.repositories.ClienteRepository;

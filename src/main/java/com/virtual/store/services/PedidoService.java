@@ -32,6 +32,14 @@ public class PedidoService {
     @Autowired
     private ItemPedidoRepository itemPedidoRepository;
 
+    @Autowired
+    private ClienteService clienteService;
+
+    /** é neceesário fazer a instanciacao dessa variavel seja com MockEmailService ou **/
+    /** ele é feita na classe de configuração referente a cada profile **/
+    @Autowired
+    private ServicoEmail servicoEmail;
+
     public Pedido findId(Integer id){
         Optional<Pedido> obj = pedidoRepository.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! Id: " + id + ", Tipo: "
@@ -42,6 +50,9 @@ public class PedidoService {
         /** GARANTINDO QUE ESTEJA SENDO INSERINDO UM NOVO PEDIDO **/
         pedido.setId(null);
         pedido.setInstante(new Date());
+
+        pedido.setCliente(clienteService.findId(pedido.getCliente().getId()));
+
         pedido.getPagamento().setEstadoPagamento(EstadoPagamento.PENDENTE);
         /** FAZENDO O PAGAMENTO SABER QUE É SEU PEDIDO INSERCAO DE MAO DUPLA **/
         pedido.getPagamento().setPedido(pedido);
@@ -58,12 +69,13 @@ public class PedidoService {
         /** PERCORRENDO A LISTA DE ITENS PEDIDOS NO JSON PASSADO E ATRIBUINDO O PRECO AO ITEM PEDIDO **/
         for (ItemPedido itemPedido : pedido.getItens()){
             itemPedido.setDesconto(0.0);
-            itemPedido.setPreco(produtoRepository.findById(itemPedido.getProduto().getId()).get().getPreco());
+            itemPedido.setProduto(produtoRepository.findById(itemPedido.getProduto().getId()).get());
+            itemPedido.setPreco(itemPedido.getProduto().getPreco());
             /** ASSOCIANDO ITEM DE PEDIDO AO PEDIDO **/
             itemPedido.setPedido(pedido);
         }
         itemPedidoRepository.saveAll(pedido.getItens());
-
+        servicoEmail.enviarConfirmacaoPedidoEmail(pedido);
         return pedido;
     }
 }

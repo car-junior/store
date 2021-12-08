@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
@@ -12,6 +13,8 @@ import java.util.Set;
 @Entity
 public class Pedido implements Serializable {
     private static final long serialVersionUID = 1L;
+
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -108,5 +111,23 @@ public class Pedido implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Número do pedido: " + getId());
+        sb.append(", Pedido feito em " + sdf.format(getInstante()));
+        sb.append(", Cliente: " + getCliente().getNome());
+        sb.append(", Situação do Pagamento: ");
+        sb.append(getPagamento().getEstadoPagamento().getDescricao());
+        sb.append("\nDetalhes do Pedido:\n");
+
+        for (ItemPedido ip : getItens()){
+            sb.append(ip.toString());
+        }
+        sb.append("Total do Pedido: ");
+        sb.append(getTotalPedido());
+        return sb.toString();
     }
 }
