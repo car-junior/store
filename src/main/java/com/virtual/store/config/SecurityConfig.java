@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] URLS = { "/h2-console/**" };
 
-    private static final String[] URLS_OPEN_GET = { "/produtos/**", "/categorias/**" };
+    private static final String[] URLS_OPEN_GET = { "/produtos/**", "/categorias/**", "/clientes/**" };
 
     /** sobrepondo metodo config da classe WebSecurityConfigurerAdapter **/
     @Override
