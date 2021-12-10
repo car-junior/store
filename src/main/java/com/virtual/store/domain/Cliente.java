@@ -1,11 +1,13 @@
 package com.virtual.store.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.virtual.store.domain.enums.PerfilUsuario;
 import com.virtual.store.domain.enums.TipoCliente;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class Cliente implements Serializable {
@@ -39,8 +41,13 @@ public class Cliente implements Serializable {
     @JsonIgnore
     private List<Pedido> pedidos = new ArrayList<>();
 
-    public Cliente(){
+    /** garantindo que ao buscar o cliente os perfis serão trazidos juntos **/
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "perfis_usuario")
+    private Set<Integer> perfis = new HashSet<>();
 
+    public Cliente(){
+        adicionarPerfil(PerfilUsuario.CLIENTE);
     }
 
     public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipoCliente, String senha) {
@@ -50,6 +57,7 @@ public class Cliente implements Serializable {
         this.cpfOuCnpj = cpfOuCnpj;
         this.tipoCliente = (tipoCliente == null) ? null : tipoCliente.getCodigo();
         this.senha = senha;
+        adicionarPerfil(PerfilUsuario.CLIENTE);
     }
 
     public Integer getId() {
@@ -112,6 +120,14 @@ public class Cliente implements Serializable {
 
     public List<Pedido> getPedidos() {
         return pedidos;
+    }
+
+    public void adicionarPerfil(PerfilUsuario perfilUsuario){
+        perfis.add(perfilUsuario.getCodigo());
+    }
+
+    public Set<PerfilUsuario> getPerfis(){
+        return perfis.stream().map( perfil -> PerfilUsuario.toEnum(perfil)).collect(Collectors.toSet());
     }
 
     @Override
