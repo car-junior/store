@@ -17,6 +17,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,9 @@ public class ClienteService {
 
     @Autowired
     private EnderecoRepository enderecoRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Cliente findId(Integer id){
         Optional<Cliente> obj = clienteRepository.findById(id);
@@ -73,14 +77,16 @@ public class ClienteService {
     }
 
     public Cliente converterDTO(ClienteUpdateDTO clienteUpdateDTO){
-        return new Cliente(clienteUpdateDTO.getId(), clienteUpdateDTO.getNome(), clienteUpdateDTO.getEmail(), null, null);
+        return new Cliente(clienteUpdateDTO.getId(), clienteUpdateDTO.getNome(), clienteUpdateDTO.getEmail(), null, null, null);
     }
 
     public Cliente converterDTO(ClienteCreateDTO clienteCreateDTO){
+        String senhaEncodada = bCryptPasswordEncoder.encode(clienteCreateDTO.getSenha());
+
         /** criado cliente a partir do clienteCreateDTO **/
         Cliente cliente = new Cliente(null, clienteCreateDTO.getNome(),
                 clienteCreateDTO.getEmail(), clienteCreateDTO.getCpfOuCnpj(),
-                TipoCliente.toEnum(clienteCreateDTO.getTipoCliente()));
+                TipoCliente.toEnum(clienteCreateDTO.getTipoCliente()), senhaEncodada);
 
         /** passando o id da cidade e com isso quando salver tem o id respectivo da cidade para cadastrar **/
         Cidade cidade = new Cidade(clienteCreateDTO.getCidadeId(), null, null);

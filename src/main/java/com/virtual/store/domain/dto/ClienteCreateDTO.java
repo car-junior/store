@@ -20,6 +20,9 @@ public class ClienteCreateDTO {
 
     private Integer tipoCliente;
 
+    @NotEmpty(message = "Senha Obrigatória")
+    private String senha;
+
     @NotEmpty(message = "Logradouro Obrigatório")
     private String logradouro;
 
@@ -76,6 +79,14 @@ public class ClienteCreateDTO {
 
     public void setTipoCliente(Integer tipoCliente) {
         this.tipoCliente = tipoCliente;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public String getLogradouro() {
