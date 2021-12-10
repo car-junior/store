@@ -38,11 +38,4 @@ public class ProdutoService {
         return produtoRepository.findDistinctByNomeContainingAndCategoriasIn (nome, categorias, pageRequest);
     }
 
-/*    public Page<Categoria> findPage(Integer pagina, Integer linhasPorPagina, String ordenarPor, String direcao){
-        *//** pageRequest é um objeto que prepara a consulta para retornar a pagina de dados **//*
-        PageRequest pageRequest = PageRequest.of(pagina,linhasPorPagina, Sort.Direction.valueOf(direcao), ordenarPor);
-
-        *//** retornando objeto de acordo com o findPage **//*
-        return categoriaRepository.findAll(pageRequest);
-    }*/
 }

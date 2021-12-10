@@ -26,11 +26,6 @@ public class ProdutoResource {
     @Autowired
     private ProdutoRepository produtoRepository;
 
-    @GetMapping
-    public ResponseEntity<List<Produto>> findAll(){
-        List<Produto> produtos = produtoRepository.findAll();
-        return ResponseEntity.ok().body(produtos);
-    }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Produto> find(@PathVariable(value = "id") Integer id){
@@ -39,7 +34,7 @@ public class ProdutoResource {
     }
 
     /** BUSCA PAGINADA DE PRODUTOS **/
-    @GetMapping(value = "/page")
+    @GetMapping
     public ResponseEntity<Page<ProdutoDTO>> findPage(@RequestParam(value = "nome", defaultValue = "") String nome,
             @RequestParam(value = "categorias", defaultValue = "") String categorias,
             @RequestParam(value = "pagina", defaultValue = "0") Integer pagina,
