@@ -1,6 +1,7 @@
 package com.virtual.store.config;
 
 import com.virtual.store.security.JWTFiltroDeAutenticacao;
+import com.virtual.store.security.JWTFiltroDeAutorizacao;
 import com.virtual.store.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -57,6 +58,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         /** adicionando filtro de autenticao do jwt **/
         http.addFilter(new JWTFiltroDeAutenticacao(authenticationManager(), jwtUtil));
+
+        /** adicionando filtro de autoricao que ira verificar se o usuario tem permissao para acessar o sistema **/
+        http.addFilter(new JWTFiltroDeAutorizacao(authenticationManager(), jwtUtil, userDetailsService));
+
         /** garantindo que o back end não irá criar sessão de usuário **/
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
