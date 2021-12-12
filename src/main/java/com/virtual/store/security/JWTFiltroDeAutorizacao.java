@@ -34,7 +34,7 @@ public class JWTFiltroDeAutorizacao extends BasicAuthenticationFilter {
         String bearerToken = request.getHeader(AUTHORIZATION);
         /** validando se existe o token e que começa com o formato padrao **/
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            UsernamePasswordAuthenticationToken usuarioTokenAutenticao = getAutenticacao(request, bearerToken.substring(7));
+            UsernamePasswordAuthenticationToken usuarioTokenAutenticao = getAutenticacao(bearerToken.substring(7));
             /** se for != null o token está certo **/
             if (usuarioTokenAutenticao != null) {
                 /** token estando certo essa funcao libera o acesso ao endpoint solicitado **/
@@ -46,7 +46,7 @@ public class JWTFiltroDeAutorizacao extends BasicAuthenticationFilter {
     }
 
     /** mandando valor do token e ele vai retornar um objeto do tipo (UsernamePasswordAuthenticationToken) somente se o token for valido se nao for retorna null **/
-    private UsernamePasswordAuthenticationToken getAutenticacao(HttpServletRequest request, String bearerToken) {
+    private UsernamePasswordAuthenticationToken getAutenticacao(String bearerToken) {
         if (jwtUtil.tokenValido(bearerToken)) {
             /** retornando usuario por meio do token **/
             String userName = jwtUtil.getUserName(bearerToken);
