@@ -4,10 +4,12 @@ import com.virtual.store.services.exceptions.DataIntegrityException;
 import com.virtual.store.services.exceptions.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.util.UrlPathHelper;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -38,6 +40,13 @@ public class ResourceExceptionHandler {
         }
 
         return ResponseEntity.status(error.getStatus()).body(error);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<StandardError> AccessDenied(AccessDeniedException excecao, HttpServletRequest r) {
+        String path = new UrlPathHelper().getPathWithinApplication(r);
+        StandardError acessoNegado = new AcessoNegado(HttpStatus.FORBIDDEN.value(), excecao.getMessage(),  System.currentTimeMillis(), path);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(acessoNegado);
     }
 
 }

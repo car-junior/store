@@ -7,6 +7,7 @@ import com.virtual.store.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -49,12 +50,15 @@ public class ClienteResource {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable(value = "id") Integer id){
         clienteService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
+
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<ClienteUpdateDTO>> findAll(){
         List<Cliente> clienteList = clienteService.findAll();
@@ -67,6 +71,7 @@ public class ClienteResource {
 
     /** definindo variaveis como parametros e opcionais **/
     /** direcao = ASC OU DESC **/
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping(value = "/page")
     public ResponseEntity<Page<ClienteUpdateDTO>> findPage(
             @RequestParam(value = "pagina", defaultValue = "0") Integer pagina,

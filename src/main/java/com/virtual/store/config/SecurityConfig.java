@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -24,6 +25,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -39,7 +41,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] URLS = { "/h2-console/**" };
 
-    private static final String[] URLS_OPEN_GET = { "/produtos/**", "/categorias/**", "/clientes/**" };
+    private static final String[] URLS_OPEN_GET = { "/produtos/**", "/categorias/**" };
+
+    private static final String[] URLS_OPEN_POST = { "/clientes/**" };
 
     /** sobrepondo metodo config da classe WebSecurityConfigurerAdapter **/
     @Override
@@ -52,6 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         /** chamando metodo que configurou o cors e desabilitando o csrf **/
         http.cors().and().csrf().disable();
         http.authorizeRequests()
+                .antMatchers(HttpMethod.POST, URLS_OPEN_POST).permitAll() /** PERMITE ACESSO APENAS AOS METODOS POST DAS URLS INFORMADAS **/
                 .antMatchers(HttpMethod.GET, URLS_OPEN_GET).permitAll() /** PERMITE ACESSO APENAS AOS METODOS GETS DAS URLS INFORMADAS **/
                 .antMatchers(URLS).permitAll() /** PERMITE ACESSO PARA AS URLS SEM SER NECESSARIO AUTENTICACAO **/
                 .anyRequest().authenticated(); /** E PARA TODO O RESTO É NECESSÁRIO AUTENTICACAO **/

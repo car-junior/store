@@ -2,9 +2,11 @@ package com.virtual.store.services;
 
 import com.virtual.store.domain.Pedido;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.stereotype.Service;
 
 import javax.mail.internet.MimeMessage;
 
+@Service
 public interface ServicoEmail {
 
     /** envio de email plano sem formatacao e html **/
