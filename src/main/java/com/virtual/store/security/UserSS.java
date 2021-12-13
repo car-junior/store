@@ -63,4 +63,9 @@ public class UserSS implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    /** retorna expressao verdadeira caso exista o perfil do usuario informado **/
+    public boolean existePerfil(PerfilUsuario perfilUsuario) {
+        return getAuthorities().contains(new SimpleGrantedAuthority(perfilUsuario.getDescricao()));
+    }
 }

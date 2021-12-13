@@ -7,9 +7,12 @@ import com.virtual.store.domain.Endereco;
 import com.virtual.store.domain.dto.CategoriaDTO;
 import com.virtual.store.domain.dto.ClienteCreateDTO;
 import com.virtual.store.domain.dto.ClienteUpdateDTO;
+import com.virtual.store.domain.enums.PerfilUsuario;
 import com.virtual.store.domain.enums.TipoCliente;
 import com.virtual.store.repositories.ClienteRepository;
 import com.virtual.store.repositories.EnderecoRepository;
+import com.virtual.store.security.UserSS;
+import com.virtual.store.services.exceptions.AutorizacaoException;
 import com.virtual.store.services.exceptions.DataIntegrityException;
 import com.virtual.store.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +39,14 @@ public class ClienteService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Cliente findId(Integer id){
+
+        UserSS usuario = UsuarioLogadoService.usuarioAutenticado();
+
+        /** se usuario for null ou não tiver perfil de admin e o id de busca não for igual ao id de usuário logado da permissão negada **/
+        if (usuario == null || !usuario.existePerfil(PerfilUsuario.ADMIN) && !id.equals(usuario.getId())){
+            throw new AutorizacaoException("Acesso negado!");
+        }
+
         Optional<Cliente> obj = clienteRepository.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! Id: " + id + ", Tipo: "
                 + Cliente.class.getName()));

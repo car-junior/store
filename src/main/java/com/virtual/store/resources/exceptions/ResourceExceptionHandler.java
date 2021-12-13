@@ -1,5 +1,6 @@
 package com.virtual.store.resources.exceptions;
 
+import com.virtual.store.services.exceptions.AutorizacaoException;
 import com.virtual.store.services.exceptions.DataIntegrityException;
 import com.virtual.store.services.exceptions.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -48,5 +49,12 @@ public class ResourceExceptionHandler {
         StandardError acessoNegado = new AcessoNegado(HttpStatus.FORBIDDEN.value(), excecao.getMessage(),  System.currentTimeMillis(), path);
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(acessoNegado);
     }
+
+    @ExceptionHandler(AutorizacaoException.class)
+    public ResponseEntity<StandardError> autorazicaoException(AutorizacaoException excecao, HttpServletRequest request){
+        StandardError error = new StandardError(HttpStatus.FORBIDDEN.value(), excecao.getMessage(), System.currentTimeMillis());
+        return ResponseEntity.status(error.getStatus()).body(error);
+    }
+
 
 }
