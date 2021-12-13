@@ -2,9 +2,11 @@ package com.virtual.store.resources;
 
 import com.virtual.store.domain.Cliente;
 import com.virtual.store.domain.Pedido;
+import com.virtual.store.domain.dto.CategoriaDTO;
 import com.virtual.store.domain.dto.ClienteCreateDTO;
 import com.virtual.store.services.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -35,6 +37,18 @@ public class PedidoResource {
                 .buildAndExpand(pedido.getId()).toUri();
 
         return ResponseEntity.created(uri).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<Pedido>> findPage(
+            @RequestParam(value = "pagina", defaultValue = "0") Integer pagina,
+            @RequestParam(value = "linhasPorPagina", defaultValue = "24") Integer linhasPorPagina,
+            @RequestParam(value = "ordenarPor", defaultValue = "instante") String ordenarPor,
+            @RequestParam(value = "direcao", defaultValue = "ASC") String direcao) {
+
+        Page<Pedido> pedidosPage = pedidoService.findPage(pagina, linhasPorPagina, ordenarPor, direcao);
+
+        return ResponseEntity.ok().body(pedidosPage);
     }
 
 
