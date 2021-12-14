@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] URLS_OPEN_GET = { "/produtos/**", "/categorias/**" };
 
-    private static final String[] URLS_OPEN_POST = { "/clientes/**" };
+    private static final String[] URLS_OPEN_POST = { "/clientes/**", "/autorizacao/recuperar_senha/**" };
 
     /** sobrepondo metodo config da classe WebSecurityConfigurerAdapter **/
     @Override

@@ -1,5 +1,6 @@
 package com.virtual.store.services;
 
+import com.virtual.store.domain.Cliente;
 import com.virtual.store.domain.Pedido;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -95,5 +96,31 @@ public abstract class AbstractEmailService implements ServicoEmail{
         context.setVariable("pedido", pedido);
         /** processando template para retornar html em forma de string **/
         return templateEngine.process("confirmacaoPedido", context);
+    }
+
+    public void enviarNovaSenhaClienteEmail(Cliente cliente, String novaSenha) {
+        SimpleMailMessage emailNovaSenha = prepararEmailNovaSenha(cliente, novaSenha);
+        enviarEmail(emailNovaSenha);
+    }
+
+    protected SimpleMailMessage prepararEmailNovaSenha(Cliente cliente, String novaSenha) {
+        SimpleMailMessage sm = new SimpleMailMessage();
+
+        /** destinatario **/
+        sm.setTo(cliente.getEmail());
+
+        /** remetente **/
+        sm.setFrom(remetente);
+
+        /** assunto email **/
+        sm.setSubject("Recuperação de senha!");
+
+        sm.setSentDate(new Date());
+
+        /** corpo do email nova senha **/
+        sm.setText("Nova senha: " + novaSenha);
+
+        return sm;
+
     }
 }
